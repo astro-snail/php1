@@ -2,7 +2,14 @@
     <div class="section-header uppercase">Product <?= $product['name']; ?></div>
     <form action="admin.php?c=product" method="POST">
         <input type="hidden" name="id" value="<?= $product['id']; ?>">
-        <input type="hidden" name="category_id" value="<?= $product['category_id']; ?>">
+        <div class="form-group">
+            <label for="category">Category</label>
+			<select id="category" class="form-control" name="category" required>
+                <?php foreach(getCategories() as $category) { ?>
+                <option value="<?= $category['id']; ?>" <?= $product['category_id'] == $category['id'] ? "selected" : ""?>><?= $category['name']; ?></option>
+                <?php } ?> 
+            </select>   
+        </div>
         <div class="form-group">
             <label for="name">Name</label>
             <input id="name" class="form-control" type="text" name="name" value="<?= $product['name'] ?>" placeholder="Product name">
@@ -33,9 +40,7 @@
         </div>
         <div class="form-group">
             <label for="features">Product features</label>
-            <textarea id="features" class="form-control" name="features" rows="5">
-                <?= implode("", $product['features']) ?>
-            </textarea>
+            <textarea id="features" class="form-control" name="features" rows="5"><?= !empty($product['features']) ? implode('\n', $product['features']) : "" ?></textarea>
         </div>
         <?php if (!empty($product['id'])) { ?>
 			<button class="btn btn-primary" type="submit" name="action" value="updateProduct">Update</button>
