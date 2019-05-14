@@ -6,19 +6,20 @@
         mysqli_begin_transaction(db());
         
         $insert = "insert into order_header (user) values ($user)";
-        
         mysqli_query(db(), $insert);
         
         $id = mysqli_insert_id(db());
         
-        foreach($items as $item) {            
-            $values[] = "($id, {$item['id']}, {$item['quantity']}, {$item['price']})";
-        }
-        $insert = "insert into order_item (order_header, product, quantity, price) values ".implode(',', $values);
-        mysqli_query(db(), $insert);
-        
-        mysqli_commit(db());
-
+		if (!empty($id)) {
+			foreach($items as $item) {            
+				$values[] = "($id, {$item['id']}, {$item['quantity']}, {$item['price']})";
+			}
+			$insert = "insert into order_item (order_header, product, quantity, price) values ".implode(',', $values);
+			mysqli_query(db(), $insert);
+            mysqli_commit(db());
+		} else {
+			mysqli_rollback(db());
+		}		
         return $id;
     }
 

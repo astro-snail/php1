@@ -26,6 +26,10 @@
             <input id="administrator" class="form-check-input" type="checkbox" name="administrator" value="true" <?= (bool)$user['administrator'] ? "checked" : "" ?>>
             <label class="form-check-label" for="administrator">Administrator</label>
         </div>
-        <button class="btn btn-primary" type="submit" name="action" value="updateUser">Update</button>
+		<?php if (!empty($user['id'])) { ?>
+			<button class="btn btn-primary" type="submit" name="action" value="updateUser">Update</button>
+		<?php } else { ?>
+			<button class="btn btn-primary" type="submit" name="action" value="createUser">Create</button>
+		<?php } ?>	
     </form>
 </div>    

@@ -14,13 +14,16 @@
                     
                 $name = $_POST['name'];
                 $description = $_POST['description'];
-                //$features = $_POST['features'];
+                $features = $_POST['features'];
                 $image_small = $_POST['image_small'];
                 $image = $_POST['image'];
-                $category = (int)$_POST['category'];
+                $category = (int)$_POST['category_id'];
                 $new_flag = isset($_POST['new_flag']) ? 1 : 0;
                 $hot_flag = isset($_POST['hot_flag']) ? 1 : 0;
+				
                 $id = createProduct($name, $description, $features, $image_small, $image, $category, $new_flag, $hot_flag);
+				
+				$destination = "admin.php?c=product";
                 break;        
             
             case "updateProduct":
@@ -51,14 +54,20 @@
         }
         header("location: $destination");
         
-    } else if (isset($_GET['id'])) {
-        $id = (int)$_GET['id'];  
-        $product = getProduct($id);
-        $title = $title." - Product ".$product['name'];
-        $content = "templates/admin/product.php";
     } else {
-        $products = getAllProducts();
-        $title = $title." - Products";
-        $content = "templates/admin/products.php";
-    }
+		if (isset($_GET['create'])) {
+            $product = ['category_id' => 1];
+            $title = $title." - New Product";
+            $content = "templates/admin/product.php";
+		} else if (isset($_GET['id'])) {
+			$id = (int)$_GET['id'];  
+			$product = getProduct($id);
+			$title = $title." - Product ".$product['name'];
+			$content = "templates/admin/product.php";
+		} else {
+			$products = getAllProducts();
+			$title = $title." - Products";
+			$content = "templates/admin/products.php";
+		}
+	}
 ?>

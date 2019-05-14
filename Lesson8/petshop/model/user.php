@@ -5,7 +5,6 @@
         $users = [];
 
         $query = "select * from user order by login";
-
         $result = mysqli_query(db(), $query);
 
         while($user = mysqli_fetch_assoc($result)) {
@@ -28,7 +27,6 @@
 
     function getUserByLogin($login) {
         $query = "select * from user where login = '$login'";
-        
         $result = mysqli_query(db(), $query);
 
         $user = mysqli_fetch_assoc($result);
@@ -51,26 +49,18 @@
         return getUserByLogin($_SESSION['login']);
     }
 
-    function updateUser($id, $login, $password, $first_name, $last_name, $email, $administrator) {
+	function createUser($login, $password, $first_name, $last_name, $email, $administrator) {
+        $insert = "insert into user (login, password, first_name, last_name, email, administrator) values ('$login', '$password', '$first_name', '$last_name', '$email', $administrator)";
         
-        if (!empty($administrator)) {
-            $update = "update user ".
-                "set login = '$login', ".
-                "password = '$password', ".
-                "first_name = '$first_name', ".
-                "last_name = '$last_name', ".
-                "email = '$email', ".
-                "administrator = $administrator ".
-                "where id = $id";
-        } else {
-            $update = "update user ".
-                "set login = '$login', ".
-                "password = '$password', ".
-                "first_name = '$first_name', ".
-                "last_name = '$last_name', ".
-                "email = '$email' ".
-                "where id = $id";
-        }    
+        mysqli_query(db(), $insert);
+		
+		$id = mysqli_insert_id(db());
+
+        return $id;
+    }
+	
+    function updateUser($id, $login, $password, $first_name, $last_name, $email, $administrator) {
+        $update = "update user set login = '$login', password = '$password', first_name = '$first_name', last_name = '$last_name', email = '$email', administrator = $administrator where id = $id";
         
         mysqli_query(db(), $update);
 

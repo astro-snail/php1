@@ -49,7 +49,7 @@
                 $last_name = $_POST['last_name'];
                 $email = $_POST['email'];
                 
-                updateUser($id, $login, $password, $first_name, $last_name, $email, $administrator);
+                updateUser($id, $login, $password, $first_name, $last_name, $email, 0);
                 
                 $destination = "index.php";
                 

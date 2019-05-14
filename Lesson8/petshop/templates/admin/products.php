@@ -52,5 +52,6 @@
             </tr>
             <?php } ?>
         </tbody>
-    </table>  
+    </table> 
+	<button class="btn btn-primary" onclick="window.location.href = 'admin.php?c=product&create=true';">New product</button>
 </div>

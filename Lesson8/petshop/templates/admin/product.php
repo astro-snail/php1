@@ -37,6 +37,10 @@
                 <?= implode("", $product['features']) ?>
             </textarea>
         </div>
-        <button class="btn btn-primary" type="submit" name="action" value="updateProduct">Update</button>
+        <?php if (!empty($product['id'])) { ?>
+			<button class="btn btn-primary" type="submit" name="action" value="updateProduct">Update</button>
+		<?php } else { ?>
+			<button class="btn btn-primary" type="submit" name="action" value="createProduct">Create</button>
+		<?php } ?>	
     </form>
 </div>
