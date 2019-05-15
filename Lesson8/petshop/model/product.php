@@ -5,8 +5,8 @@
         $query = "select product.*, category.id as category_id, category.name as category, price.price ".
                  "from product ". 
                  "join category on category.id = product.category ".
-                 "join price on price.product = product.id and price.date_from <= NOW() and price.date_to >= NOW() ".
-                 "where product.id = $id and product.date_from <= NOW() and product.date_to >= NOW()";
+                 "join price on price.product = product.id and price.date_from <= NOW() and price.date_to > NOW() ".
+                 "where product.id = $id and product.date_from <= NOW() and product.date_to > NOW()";
 
         $result = mysqli_query(db(), $query);
 
@@ -24,7 +24,7 @@
         $query = "select product.*, category.id as category_id, category.name as category, price.price ". 
                  "from product ". 
                  "join category on category.id = product.category ".
-                 "join price on price.product = product.id and price.date_from <= NOW() and price.date_to >= NOW() ".
+                 "join price on price.product = product.id and price.date_from <= NOW() and price.date_to > NOW() ".
                  "where product.date_from <= NOW() and product.date_to > NOW() ".
                  "order by category.id, product.name";
 
@@ -44,7 +44,7 @@
         $query = "select product.*, category.id as category_id, category.name as category, price.price ". 
                  "from product ". 
                  "join category on category.id = product.category and category.id = $category ".
-                 "join price on price.product = product.id and price.date_from <= NOW() and price.date_to >= NOW() ".
+                 "join price on price.product = product.id and price.date_from <= NOW() and price.date_to > NOW() ".
                  "where product.date_from <= NOW() and product.date_to > NOW() ".
                  "order by product.name";
 
