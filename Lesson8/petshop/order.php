@@ -15,8 +15,7 @@
             case "updateOrder": 
                 $id = (int)$_POST['id'];
                 $status = $_POST['status'];
-                $date_completed = empty($_POST['date_completed']) ? null : date('Y-m-d H:i:s', strtotime($_POST['date_completed']));
-                updateOrder($id, $status, $date_completed);
+                updateOrder($id, $status, null);
                 break;     
 
             case "cancelOrder": 

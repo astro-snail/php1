@@ -16,7 +16,7 @@
             <ul class="product-features">
                 <?php foreach($product['features'] as $feature) { ?>
                     <li><?= $feature; ?></li>
-                <?php } ?>   
+                <?php } ?>
             </ul>
             <div class="product-action">
                 <form action="shopping-cart.php" method="POST">

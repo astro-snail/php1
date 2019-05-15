@@ -10,6 +10,7 @@
     <div class="error"><?= $message; ?></div>
     <form action="user.php" method="POST">
         <input type="hidden" name="id" value="<?= $user['id']; ?>">
+        <input type="hidden" name="administrator" value="<?= $user['administrator']; ?>">
         <div class="form-group">
             <label for="login">User name</label>
             <input id="login" class="form-control" type="text" name="login" value="<?= $user['login'] ?>" placeholder="Your user name">

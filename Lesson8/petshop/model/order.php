@@ -9,21 +9,22 @@
         mysqli_query(db(), $insert);
         
         $id = mysqli_insert_id(db());
+
+        foreach($items as $item) {            
+            $values[] = "($id, {$item['id']}, {$item['quantity']}, {$item['price']})";
+        }
         
-		if (!empty($id)) {
-			foreach($items as $item) {            
-				$values[] = "($id, {$item['id']}, {$item['quantity']}, {$item['price']})";
-			}
-			$insert = "insert into order_item (order_header, product, quantity, price) values ".implode(',', $values);
-			mysqli_query(db(), $insert);
-            mysqli_commit(db());
-		} else {
-			mysqli_rollback(db());
-		}		
+        $insert = "insert into order_item (order_header, product, quantity, price) values ".implode(',', $values);
+        
+        mysqli_query(db(), $insert);
+
+        mysqli_commit(db());
+	
         return $id;
     }
 
     function getOrder($id) {
+        
         $query = "select * from order_header where id = $id";
 
         $result = mysqli_query(db(), $query);
@@ -103,27 +104,19 @@
         return mysqli_affected_rows(db());
     }
 
-    function cancelOrder($id) {
-        return setOrderStatus($id, "Cancelled");
-    }
-    
-    function completeOrder($id, $date_completed) {
-        return updateOrder($id, "Completed", $date_completed);
-    }
-
     function updateOrder($id, $status, $date_completed) {
         if ($date_completed == null) {
-            $update = "update order_header set status = '$status' where id = $id";
+            $update = "update order_header set status = '$status' where id = $id";    
         } else {
             $update = "update order_header set status = '$status', date_completed = '$date_completed' where id = $id";
         }
-        
         mysqli_query(db(), $update);
         
         return mysqli_affected_rows(db());
     }
 
     function deleteOrderItem($id, $item_id) {
+        
         $delete = "delete from order_item where order_header = $id and id = $item_id";
         
         mysqli_query(db(), $delete);
@@ -132,6 +125,7 @@
     }
 
     function changeOrderItem($id, $item_id, $quantity) {
+        
         $update = "update order_item set quantity = quantity + $quantity where order_header = $id and id = $item_id";
         
         mysqli_query(db(), $update);

@@ -26,25 +26,6 @@
 				$destination = "admin.php?c=order";
                 break;      
                 
-            case "completeOrder": 
-                $id = (int)$_POST['id'];
-                
-                if (empty($_POST['date_completed'])) {
-                    exit("Enter order completed date");
-                }
-                
-                $date_completed = date('Y-m-d H:i:s', strtotime($_POST['date_completed']));
-				
-                completeOrder($id, $date_completed);
-				
-				$destination = "admin.php?c=order";
-                break;    
-                
-            case "cancelOrder": 
-                $id = (int)$_POST['id'];
-                cancelOrder($id);
-                break;    
-                
             case "deleteOrderItem": 
                 $id = (int)$_POST['id'];
                 $item_id = (int)$_POST['item_id'];
@@ -62,7 +43,7 @@
         
     } else {
 		if (isset($_GET['create'])) {
-			$order = ['status' => 'New', 'user' => getCurrentUser()['id'], 'date_created' => date()];
+			$order = ['status' => 'New', 'user' => getCurrentUser()['id'], 'date_created' => date('Y-m-d H:i:s')];
 			$items = [];
 			$title = $title." - New Order";
 			$content = "templates/admin/order.php";

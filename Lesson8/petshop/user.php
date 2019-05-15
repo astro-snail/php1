@@ -48,8 +48,9 @@
                 $first_name = $_POST['first_name'];
                 $last_name = $_POST['last_name'];
                 $email = $_POST['email'];
+                $administrator = (int)$_POST['administrator'];
                 
-                updateUser($id, $login, $password, $first_name, $last_name, $email, 0);
+                updateUser($id, $login, $password, $first_name, $last_name, $email, $administrator);
                 
                 $destination = "index.php";
                 

@@ -20,7 +20,7 @@
         </div>
         <div class="form-group">
             <label for="price">Price</label>
-            <input id="price" class="form-control" type="text" name="price" value="<?= number_format($product['price'], 2); ?>" placeholder="Price">
+            <input id="price" class="form-control" type="text" name="price" value="<?= $product['price']; ?>" placeholder="Price">
         </div>
         <div class="form-group">
             <label for="imageSmall">Image (small)</label>
@@ -40,7 +40,7 @@
         </div>
         <div class="form-group">
             <label for="features">Product features</label>
-            <textarea id="features" class="form-control" name="features" rows="5"><?= !empty($product['features']) ? implode('\n', $product['features']) : "" ?></textarea>
+            <textarea id="features" class="form-control" name="features" rows="5"><?= !empty($product['features']) ? implode("\r\n", $product['features']) : "" ?></textarea>
         </div>
         <?php if (!empty($product['id'])) { ?>
 			<button class="btn btn-primary" type="submit" name="action" value="updateProduct">Update</button>

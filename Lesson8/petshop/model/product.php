@@ -2,18 +2,16 @@
     require_once "connection.php";
 
     function getProduct($id) {
-        $today = date("Y-m-d");
-
         $query = "select product.*, category.id as category_id, category.name as category, price.price ".
                  "from product ". 
                  "join category on category.id = product.category ".
-                 "join price on price.product = product.id and price.date_from <= '$today' and price.date_to >= '$today' ".
-                 "where product.id = $id and product.date_from <= '$today' and product.date_to >= '$today'";
+                 "join price on price.product = product.id and price.date_from <= NOW() and price.date_to >= NOW() ".
+                 "where product.id = $id and product.date_from <= NOW() and product.date_to >= NOW()";
 
         $result = mysqli_query(db(), $query);
 
-        if ($product = mysqli_fetch_assoc($result)) {        
-            $product['features'] = explode('\n', $product['features']);
+        if ($product = mysqli_fetch_assoc($result)) {
+            $product['features'] = explode("\r\n", $product['features']);
         }
         mysqli_free_result($result);
         
@@ -23,13 +21,11 @@
     function getAllProducts() {
         $products = [];
 
-        $today = date("Y-m-d");
-
         $query = "select product.*, category.id as category_id, category.name as category, price.price ". 
                  "from product ". 
                  "join category on category.id = product.category ".
-                 "join price on price.product = product.id and price.date_from <= '$today' and price.date_to >= '$today' ".
-                 "where product.date_from <= '$today' and product.date_to >= '$today' ".
+                 "join price on price.product = product.id and price.date_from <= NOW() and price.date_to >= NOW() ".
+                 "where product.date_from <= NOW() and product.date_to > NOW() ".
                  "order by category.id, product.name";
 
         $result = mysqli_query(db(), $query);
@@ -45,13 +41,11 @@
     function getProducts($category) {
         $products = [];
 
-        $today = date("Y-m-d");
-
         $query = "select product.*, category.id as category_id, category.name as category, price.price ". 
                  "from product ". 
                  "join category on category.id = product.category and category.id = $category ".
-                 "join price on price.product = product.id and price.date_from <= '$today' and price.date_to >= '$today' ".
-                 "where product.date_from <= '$today' and product.date_to >= '$today' ".
+                 "join price on price.product = product.id and price.date_from <= NOW() and price.date_to >= NOW() ".
+                 "where product.date_from <= NOW() and product.date_to > NOW() ".
                  "order by product.name";
 
         $result = mysqli_query(db(), $query);
@@ -75,7 +69,7 @@
 
 		$insert = "insert into price (product, price) values($id, $price)";
 			
-		mysqli_query(db(), $insert)) {
+		mysqli_query(db(), $insert);
 
         mysqli_commit(db());
 	
@@ -83,18 +77,19 @@
     }
 
     function updateProduct($id, $name, $description, $features, $image_small, $image, $category, $new_flag, $hot_flag, $price) {
-		mysqli_begin_transaction(db());
+		
+        $product = getProduct($id);
+        
+        mysqli_begin_transaction(db());
 		
         $update = "update product set name = '$name', description = '$description', features = '$features', image_small = '$image_small', image = '$image', category = $category, new_flag = $new_flag, hot_flag = $hot_flag where id = $id";
         
         mysqli_query(db(), $update);
 		
-		$product = getProduct($id);
-		
-		if ($price != $product['price']) {
-			
-			$update = "update price set date_to = ".date('Y-m-d')." where id = (select id from price where product = $id and date_to = '9999-12-31 23:59:59'))";
-			
+		if (number_format($price, 2) != number_format($product['price'], 2)) {
+
+			$update = "update price set date_to = NOW() where product = $id and date_to > NOW()";
+
 			mysqli_query(db(), $update);
 			
 			$insert = "insert into price (product, price) values($id, $price)";
@@ -108,18 +103,10 @@
     }
 
     function deleteProduct($id) {
-		mysqli_begin_transaction(db());
+        $update = "update product set date_to = NOW() where id = $id";
 		
-		$delete = "delete from price where product = $id";
+        mysqli_query(db(), $update);
 		
-		mysqli_query(db(), $delete);
-        
-		$delete = "delete from product where id = $id";
-        
-        mysqli_query(db(), $delete);
-		
-		mysqli_commit(db());
-        
         return mysqli_affected_rows(db());
     }
 ?>

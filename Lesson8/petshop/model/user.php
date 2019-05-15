@@ -60,7 +60,7 @@
     }
 	
     function updateUser($id, $login, $password, $first_name, $last_name, $email, $administrator) {
-        $update = "update user set login = '$login', password = '$password', first_name = '$first_name', last_name = '$last_name', email = '$email', administrator = $administrator where id = $id";
+        $update = "update user set login = '$login', password = '$password', first_name = '$first_name', last_name = '$last_name', email = '$email', administrator = $administrator where id = $id";    
         
         mysqli_query(db(), $update);
 
